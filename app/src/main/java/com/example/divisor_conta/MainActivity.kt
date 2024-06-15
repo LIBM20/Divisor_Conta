@@ -127,7 +127,6 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "hi")
         FieldText(
             labelText = stringResource(id = R.string.quantidade_de_pessoas),
             value = quantInput,
