@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Divisor_Conta</string>
+    <string name="quantidade_de_pessoas">Quantidade de pessoas</string>
+    <string name="conta">Conta</string>
+    <string name="pretende_dar_gorjeta">Pretende dar gorjeta?</string>
 </resources>
