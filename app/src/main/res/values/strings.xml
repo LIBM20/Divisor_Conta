@@ -5,7 +5,6 @@
     <string name="pretende_dar_gorjeta">Pretende dar gorjeta?</string>
     <string name="gorjeta_individual">Pretende que a gorjeta seja individual?</string>
     <string name="percentagem_de_gorjeta">Percentagem de gorjeta</string>
-    <string name="percentagem_de_gorjeta_individual">Percentagem de gorjeta para a %1$sª pessoa</string>
-    <string name="total_indivual">Total a pagar para a pessoa %1$s: %2$s</string>
+    <string name="total_indivual">Total a pagar para a %1$sª pessoa : %2$s</string>
     <string name="total_geral">Total geral: %1$s</string>
 </resources>

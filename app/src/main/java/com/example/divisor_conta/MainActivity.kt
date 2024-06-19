@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Scaffold(modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 48.dp, bottom = 48.dp)) { innerPadding -> DivisorLayout(modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp)) { innerPadding -> DivisorLayout(modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize())
                 }
@@ -108,7 +108,7 @@ fun FieldText(labelText : String, value: String,
             id = R.color.grey_dark), focusedLabelColor = colorResource(id = R.color.white), focusedIndicatorColor = colorResource(id = R.color.grey_light), focusedTextColor = colorResource(
             id = R.color.white
         )),
-        modifier = modifier
+        modifier = modifier.padding(top = 16.dp, bottom = 16.dp)
     )
 }
 
@@ -174,7 +174,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
     if(conta == 0.0){
         gorjeta = false
     }
-    
+
 
     when(currentStep){
         1->{
@@ -202,14 +202,12 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                     onValueChange = { newValue -> quantInput = newValue },
                     action = ImeAction.Next
                 )
-                Spacer(modifier = Modifier.height(16.dp))
                 FieldText(
                     labelText = stringResource(id = R.string.conta),
                     value = contaInput,
                     onValueChange = { newValue -> contaInput = newValue },
                     action = ImeAction.Done
                 )
-                Spacer(modifier = Modifier.height(20.dp))
                 GorjetaSwitch(
                     texto = stringResource(id = R.string.pretende_dar_gorjeta),
                     gorjeta = gorjeta,
@@ -217,12 +215,14 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                     modifier = Modifier
                 )
                 if (gorjeta) {
-                    GorjetaSwitch(
-                        texto = stringResource(R.string.gorjeta_individual),
-                        gorjeta = gIndividual,
-                        onGorjetaChanged = { gIndividual = it },
-                        modifier = Modifier.padding(bottom = 12.dp, end = 26.dp)
-                    )
+                    if(quant > 1) {
+                        GorjetaSwitch(
+                            texto = stringResource(R.string.gorjeta_individual),
+                            gorjeta = gIndividual,
+                            onGorjetaChanged = { gIndividual = it },
+                            modifier = Modifier.padding(end = 26.dp)
+                        )
+                    }
                     if(!gIndividual) {
                         FieldText(
                             labelText = stringResource(R.string.percentagem_de_gorjeta),
@@ -236,7 +236,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                             },
                             action = ImeAction.Done
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        //Spacer(modifier = Modifier.height(16.dp))
                         if (percentGorjetaInput.isNotEmpty()) {
                             percentGorjeta = percentGorjetaInput[0].toDoubleOrNull() ?: 0.0
                         }
@@ -248,14 +248,12 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                             Spacer(modifier = Modifier.height(16.dp))
                             FieldText(
                                 labelText = stringResource(
-                                    R.string.percentagem_de_gorjeta_individual,
-                                    i + 1
+                                    R.string.percentagem_de_gorjeta,
                                 ),
                                 value = percentGorjetaInput[i],
                                 onValueChange = { newValue -> percentGorjetaInput[i] = newValue },
                                 action = ImeAction.Done
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
                             percentGorjeta = percentGorjetaInput[i].toDoubleOrNull() ?: 0.0
                             total = calcConta(1, conta / quant, percentGorjeta)
                             Text(text = stringResource(R.string.total_indivual, i + 1, total))
@@ -265,10 +263,12 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                     percentGorjetaInput.clear()
                     gIndividual = false
                 }
-                Spacer(modifier = Modifier.height(20.dp))
-                total = calcConta(pessoas = quant, conta = conta, percentGorjeta = percentGorjeta)
-                Text(text = stringResource(R.string.total_geral, total))
-
+                if(!gIndividual) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    total =
+                        calcConta(pessoas = quant, conta = conta, percentGorjeta = percentGorjeta)
+                    Text(text = stringResource(R.string.total_geral, total))
+                }
             }
         }
     }
