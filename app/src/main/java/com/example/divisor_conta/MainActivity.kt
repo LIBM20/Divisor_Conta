@@ -215,6 +215,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                     modifier = Modifier
                 )
                 if (gorjeta) {
+                    //Caso a quantidade de pessoas seja 1, o switch de gorjeta individual não aparecerá
                     if(quant > 1) {
                         GorjetaSwitch(
                             texto = stringResource(R.string.gorjeta_individual),
@@ -263,6 +264,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                     percentGorjetaInput.clear()
                     gIndividual = false
                 }
+                //Como os totais para cada pessoa vão aparecer, não vale a pena o total geral aparecer
                 if(!gIndividual) {
                     Spacer(modifier = Modifier.height(16.dp))
                     total =
