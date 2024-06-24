@@ -214,7 +214,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                 ) {
                     Divider(
                         color = colorResource(id = R.color.grey_dark),
-                        thickness = 120.dp,
+                        thickness = 100.dp,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Column(
@@ -266,17 +266,13 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                                     },
                                     action = ImeAction.Done
                                 )
-                                // Spacer(modifier = Modifier.height(16.dp))
                                 if (percentGorjetaInput.isNotEmpty()) {
                                     percentGorjeta = percentGorjetaInput[0].toDoubleOrNull() ?: 0.0
                                 }
                             } else {
                                 currentStep = 3
+                                gIndividual = false
                             }
-                        }
-                        else {
-                            percentGorjetaInput.clear()
-                            gIndividual = false
                         }
                         // Como os totais para cada pessoa vão aparecer, não vale a pena o total geral aparecer
                         if (!gIndividual) {
@@ -289,10 +285,19 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                             Text(text = stringResource(R.string.total_geral, total), style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
                         }
                         Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { contaInput = ""
+                                        quantInput = ""
+                                        percentGorjetaInput.clear()},
+                            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.grey_dark))
+                        ) {
+                            Text(text = "Limpar", style = TextStyle(color = Color.White))
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                     Divider(
                         color = colorResource(id = R.color.grey_dark),
-                        thickness = 120.dp,
+                        thickness = 100.dp,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -310,7 +315,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = "Gorjeta Individual",
-                    style = TextStyle(fontSize = 30.sp, color = Color.Black), modifier = Modifier.padding(top = 50.dp, bottom = 20.dp)
+                    style = TextStyle(fontSize = 30.sp, color = Color.Black), modifier = Modifier.padding(top=10.dp,bottom = 10.dp)
                 )
                 while (percentGorjetaInput.size < quant) {
                     percentGorjetaInput.add("")
@@ -326,7 +331,7 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                         action = ImeAction.Done
                     )
                     percentGorjeta = percentGorjetaInput[i].toDoubleOrNull() ?: 0.0
-                    total = calcConta(1, conta / quant, percentGorjeta)
+                    total = calcConta(quant, conta, percentGorjeta)
                     Text(
                         text = stringResource(
                             R.string.total_indivual,
@@ -335,14 +340,14 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
                         ), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     )
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = { currentStep = 2 },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.white)),
-                    modifier = Modifier.wrapContentWidth(Alignment.Start)
+                    onClick = { currentStep = 2},
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.grey_dark))
                 ) {
-                    Text(text = "<-", style = TextStyle(color = Color.Black))
+                    Text(text = "Voltar atrás", style = TextStyle(color = Color.White))
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
