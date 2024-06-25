@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -202,105 +201,97 @@ fun DivisorLayout(modifier: Modifier = Modifier) {
         }
 
         2 -> {
-            //De maneira a poder ter o divisor em baixo foi criada uma box para que este
-            //fique fixo
-            Box(
-                modifier = modifier
-                    .statusBarsPadding()
-                    .fillMaxSize()
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
+                Divider(
+                    color = colorResource(id = R.color.grey_dark),
+                    thickness = 100.dp,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = modifier
+                        .weight(1f)
+                        .statusBarsPadding()
+                        .background(colorResource(id = R.color.teal_light)),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Divider(
-                        color = colorResource(id = R.color.grey_dark),
-                        thickness = 100.dp,
-                        modifier = Modifier.fillMaxWidth()
+                    FieldText(
+                        labelText = stringResource(id = R.string.quantidade_de_pessoas),
+                        value = quantInput,
+                        onValueChange = { newValue -> quantInput = newValue },
+                        action = ImeAction.Next
                     )
-                    Column(
-                        modifier = modifier
-                            .weight(1f)
-                            .statusBarsPadding()
-                            .background(colorResource(id = R.color.teal_light)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        FieldText(
-                            labelText = stringResource(id = R.string.quantidade_de_pessoas),
-                            value = quantInput,
-                            onValueChange = { newValue -> quantInput = newValue },
-                            action = ImeAction.Next
-                        )
-                        FieldText(
-                            labelText = stringResource(id = R.string.conta),
-                            value = contaInput,
-                            onValueChange = { newValue -> contaInput = newValue },
-                            action = ImeAction.Done
-                        )
-                        GorjetaSwitch(
-                            texto = stringResource(id = R.string.pretende_dar_gorjeta),
-                            gorjeta = gorjeta,
-                            onGorjetaChanged = { newValue -> gorjeta = newValue },
-                            modifier = Modifier
-                        )
-                        if (gorjeta) {
-                            // Caso a quantidade de pessoas seja 1, o switch de gorjeta individual não aparecerá
-                            if (quant > 1) {
-                                GorjetaSwitch(
-                                    texto = stringResource(R.string.gorjeta_individual),
-                                    gorjeta = gIndividual,
-                                    onGorjetaChanged = { gIndividual = it },
-                                    modifier = Modifier
-                                )
-                            }
-                            if (!gIndividual) {
-                                FieldText(
-                                    labelText = stringResource(R.string.percentagem_de_gorjeta),
-                                    value = percentGorjetaInput.getOrNull(0) ?: "",
-                                    onValueChange = { newValue ->
-                                        if (percentGorjetaInput.isEmpty()) {
-                                            percentGorjetaInput.add(newValue)
-                                        } else {
-                                            percentGorjetaInput[0] = newValue
-                                        }
-                                    },
+                    FieldText(
+                        labelText = stringResource(id = R.string.conta),
+                        value = contaInput,
+                        onValueChange = { newValue -> contaInput = newValue },
+                        action = ImeAction.Done
+                    )
+                    GorjetaSwitch(
+                        texto = stringResource(id = R.string.pretende_dar_gorjeta),
+                        gorjeta = gorjeta,
+                        onGorjetaChanged = { newValue -> gorjeta = newValue },
+                        modifier = Modifier
+                    )
+                    if (gorjeta) {
+                        // Caso a quantidade de pessoas seja 1, o switch de gorjeta individual não aparecerá
+                        if (quant > 1) {
+                            GorjetaSwitch(
+                                texto = stringResource(R.string.gorjeta_individual),
+                                gorjeta = gIndividual,
+                                onGorjetaChanged = { gIndividual = it },
+                                modifier = Modifier
+                            )
+                        }
+                        if (!gIndividual) {
+                            FieldText(
+                                labelText = stringResource(R.string.percentagem_de_gorjeta),
+                                value = percentGorjetaInput.getOrNull(0) ?: "",
+                                onValueChange = { newValue ->
+                                    if (percentGorjetaInput.isEmpty()) {
+                                        percentGorjetaInput.add(newValue)
+                                    } else {
+                                        percentGorjetaInput[0] = newValue
+                                    }
+                                                },
                                     action = ImeAction.Done
                                 )
-                                if (percentGorjetaInput.isNotEmpty()) {
-                                    percentGorjeta = percentGorjetaInput[0].toDoubleOrNull() ?: 0.0
-                                }
-                            } else {
-                                currentStep = 3
-                                gIndividual = false
+                            if (percentGorjetaInput.isNotEmpty()) {
+                                percentGorjeta = percentGorjetaInput[0].toDoubleOrNull() ?: 0.0
                             }
+                        } else {
+                            currentStep = 3
+                            gIndividual = false
                         }
-                        // Como os totais para cada pessoa vão aparecer, não vale a pena o total geral aparecer
-                        if (!gIndividual) {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            total = calcConta(
-                                pessoas = quant,
-                                conta = conta,
-                                percentGorjeta = percentGorjeta
-                            )
-                            Text(text = stringResource(R.string.total_geral, total), style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = { contaInput = ""
-                                        quantInput = ""
-                                        percentGorjetaInput.clear()},
-                            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.grey_dark))
-                        ) {
-                            Text(text = "Limpar", style = TextStyle(color = Color.White))
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    Divider(
-                        color = colorResource(id = R.color.grey_dark),
-                        thickness = 100.dp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    // Como os totais para cada pessoa vão aparecer, não vale a pena o total geral aparecer
+                    if (!gIndividual) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        total = calcConta(
+                            pessoas = quant,
+                            conta = conta,
+                            percentGorjeta = percentGorjeta
+                        )
+                        Text(text = stringResource(R.string.total_geral, total), style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { contaInput = ""
+                            quantInput = ""
+                            percentGorjetaInput.clear()},
+                        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.grey_dark))
+                    ) {
+                        Text(text = "Limpar", style = TextStyle(color = Color.White))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
+                Divider(
+                    color = colorResource(id = R.color.grey_dark),
+                    thickness = 100.dp,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
         3 ->{
